@@ -129,7 +129,7 @@
     <!-- Loading Screen -->
     <div id="loading-overlay">
         <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 mb-4"></div>
-        <p class="text-blue-600 font-semibold">กำลังประมวลผลข้อมูล...</p>
+        <p class="text-blue-600 font-semibold" id="loading-text">กำลังประมวลผลข้อมูล...</p>
     </div>
 
     <!-- Navigation -->
@@ -652,7 +652,9 @@
             document.getElementById('dashboard-section').classList.remove('hidden');
             document.getElementById('nav-dashboard').className = "nav-active px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center";
             document.getElementById('nav-survey').className = "text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center";
-            updateDashboard();
+            
+            // Try to fetch real data when entering dashboard
+            fetchDataFromSheets();
         }
 
         function activateSurveyView() {
@@ -674,7 +676,7 @@
                 btn.classList.add('fa-spin');
                 setTimeout(() => btn.classList.remove('fa-spin'), 1000);
             }
-            updateDashboard();
+            fetchDataFromSheets();
         }
 
         function selectOption(element, groupName) {
@@ -707,6 +709,7 @@
             data.timestamp = new Date().toLocaleString('th-TH');
 
             document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('loading-text').innerText = 'กำลังบันทึกข้อมูล...';
 
             if (USE_MOCK_DATA) {
                 setTimeout(() => { surveyData.push(data); finishSubmission(); }, 1000);
@@ -717,7 +720,11 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 })
-                .then(() => { surveyData.push(data); finishSubmission(); })
+                .then(() => { 
+                    // Add locally for immediate feedback, but ideally we refresh
+                    surveyData.push(data); 
+                    finishSubmission(); 
+                })
                 .catch(error => {
                     console.error('Error:', error);
                     document.getElementById('loading-overlay').style.display = 'none';
@@ -743,6 +750,35 @@
                 });
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+        }
+
+        // --- DATA FETCHING (NEW) ---
+        async function fetchDataFromSheets() {
+            if(USE_MOCK_DATA) {
+                updateDashboard();
+                return;
+            }
+
+            document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('loading-text').innerText = 'กำลังดึงข้อมูลทั้งหมด...';
+
+            try {
+                // Fetch data via GET request (requires GAS `doGet` implementation)
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                
+                if (data && Array.isArray(data)) {
+                    surveyData = data; // Replace local data with server data
+                    console.log("Fetched " + surveyData.length + " rows");
+                }
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                // Fail silently or show toast? For now just use what we have or mock
+                // Swal.fire('แจ้งเตือน', 'ไม่สามารถดึงข้อมูลเก่าได้ (ใช้ข้อมูลที่เพิ่งกรอกแทน)', 'warning');
+            } finally {
+                document.getElementById('loading-overlay').style.display = 'none';
+                updateDashboard();
+            }
         }
 
         // --- CHART ACTIONS ---
@@ -819,15 +855,16 @@
         }
 
         function updateDashboard() {
-            if (surveyData.length === 0) return;
-
+            // Remove check for empty data to allow empty state rendering if needed
+            
             // KPIs
             document.getElementById('kpi-total').innerText = surveyData.length;
             const happyCount = surveyData.filter(d => d.q4 === 'รู้สึกสนุกและได้ประสบการณ์').length;
-            document.getElementById('kpi-satisfaction').innerText = Math.round((happyCount / surveyData.length) * 100) + '%';
+            const satisfaction = surveyData.length > 0 ? Math.round((happyCount / surveyData.length) * 100) : 0;
+            document.getElementById('kpi-satisfaction').innerText = satisfaction + '%';
             
             const countsQ1 = countBy('q1');
-            const topActivity = Object.keys(countsQ1).reduce((a, b) => countsQ1[a] > countsQ1[b] ? a : b);
+            const topActivity = Object.keys(countsQ1).length ? Object.keys(countsQ1).reduce((a, b) => countsQ1[a] > countsQ1[b] ? a : b) : '-';
             document.getElementById('kpi-top-activity').innerText = topActivity;
 
             const countsQ6 = countBy('q6');
@@ -838,14 +875,16 @@
             // Table
             const tbody = document.getElementById('dataTableBody');
             tbody.innerHTML = '';
-            surveyData.slice(-10).reverse().forEach(d => { 
+            // Show latest 50 rows only to prevent lag if data is huge
+            const displayData = surveyData.slice(-50).reverse();
+            displayData.forEach(d => { 
                 const tr = document.createElement('tr');
                 tr.className = "bg-white border-b hover:bg-slate-50";
-                tr.innerHTML = `<td class="px-6 py-4">${d.timestamp}</td><td class="px-6 py-4 font-medium text-slate-800">${d.q1}</td><td class="px-6 py-4">${d.q2}</td><td class="px-6 py-4">${d.q3}</td><td class="px-6 py-4">${d.q4}</td><td class="px-6 py-4">${d.q5}</td><td class="px-6 py-4 text-blue-600 font-medium">${d.q6}</td>`;
+                tr.innerHTML = `<td class="px-6 py-4">${d.timestamp || '-'}</td><td class="px-6 py-4 font-medium text-slate-800">${d.q1 || '-'}</td><td class="px-6 py-4">${d.q2 || '-'}</td><td class="px-6 py-4">${d.q3 || '-'}</td><td class="px-6 py-4">${d.q4 || '-'}</td><td class="px-6 py-4">${d.q5 || '-'}</td><td class="px-6 py-4 text-blue-600 font-medium">${d.q6 || '-'}</td>`;
                 tbody.appendChild(tr);
             });
 
-            // --- SUMMARY STATS (NEW FUNCTION CALL) ---
+            // --- SUMMARY STATS ---
             updateSummaryStats();
 
             // Color Palette
