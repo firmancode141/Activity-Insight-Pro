@@ -10,129 +10,35 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #f8fafc;
-            overflow-x: hidden;
-        }
-        
-        /* Custom Scrollbar */
+        body { font-family: 'Sarabun', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
-
-        /* Glassmorphism & UI Elements */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #2563eb, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .radio-selected {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-        }
-
-        .nav-active {
-            color: #2563eb;
-            background-color: #eff6ff;
-            border-radius: 0.5rem;
-        }
-
-        /* Improved Chart Controls */
-        .chart-controls {
-            display: flex;
-            gap: 0.25rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-            margin-bottom: 0.5rem;
-        }
-        .chart-btn {
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 6px;
-            background-color: #f8fafc;
-            color: #64748b;
-            border: 1px solid #e2e8f0;
-            transition: all 0.2s;
-            font-size: 0.85rem;
-        }
-        .chart-btn:hover {
-            background-color: #e2e8f0;
-            color: #3b82f6;
-            transform: scale(1.05);
-        }
-        .chart-btn.active {
-            background-color: #eff6ff;
-            color: #2563eb;
-            border-color: #bfdbfe;
-        }
-        
-        .download-btn {
-            margin-left: 8px;
-            border-color: #bbf7d0;
-            background-color: #f0fdf4;
-            color: #16a34a;
-        }
-        .download-btn:hover {
-            background-color: #dcfce7;
-        }
-
-        /* Loading Overlay */
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.9);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-
-        /* Print Styling */
-        @media print {
-            nav, .no-print, #survey-section, button { display: none !important; }
-            #dashboard-section { display: block !important; padding: 0 !important; }
-            body { background: white; }
-            .glass-panel { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; margin-bottom: 20px; }
-            .chart-controls { display: none !important; }
-        }
+        .glass-panel { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05); }
+        .radio-selected { border-color: #3b82f6; background-color: #eff6ff; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); }
+        .nav-active { color: #2563eb; background-color: #eff6ff; border-radius: 0.5rem; }
+        .chart-controls { display: flex; gap: 0.25rem; flex-wrap: wrap; justify-content: flex-end; margin-bottom: 0.5rem; }
+        .chart-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; background-color: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; transition: all 0.2s; font-size: 0.85rem; }
+        .chart-btn:hover { background-color: #e2e8f0; color: #3b82f6; transform: scale(1.05); }
+        .chart-btn.active { background-color: #eff6ff; color: #2563eb; border-color: #bfdbfe; }
+        .download-btn { margin-left: 8px; border-color: #bbf7d0; background-color: #f0fdf4; color: #16a34a; }
+        #loading-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.9); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; }
+        @media print { nav, .no-print, #survey-section, button { display: none !important; } #dashboard-section { display: block !important; padding: 0 !important; } .glass-panel { box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; margin-bottom: 20px; } .chart-controls { display: none !important; } }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
-    <!-- Loading Screen -->
     <div id="loading-overlay">
         <div class="animate-spin rounded-full h-12 w-12 border-b-4 border-blue-600 mb-4"></div>
         <p class="text-blue-600 font-semibold" id="loading-text">กำลังประมวลผลข้อมูล...</p>
     </div>
 
-    <!-- Navigation -->
     <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm border-b border-slate-200 no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -143,110 +49,48 @@
                     <span class="font-bold text-xl tracking-wide text-slate-800 hidden sm:block">Activity Insight <span class="text-blue-600 font-light">Pro</span></span>
                 </div>
                 <div class="flex items-center space-x-2">
-                    <button onclick="switchTab('survey')" id="nav-survey" class="nav-active px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center">
-                        <i class="fas fa-clipboard-list mr-2"></i> แบบสอบถาม
-                    </button>
-                    <!-- ปุ่ม Dashboard จะมีการตรวจสอบรหัสผ่าน -->
-                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center">
-                        <i class="fas fa-chart-line mr-2"></i> แดชบอร์ด (Admin)
-                    </button>
+                    <button onclick="switchTab('survey')" id="nav-survey" class="nav-active px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center"><i class="fas fa-clipboard-list mr-2"></i> แบบสอบถาม</button>
+                    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center"><i class="fas fa-chart-line mr-2"></i> แดชบอร์ด (Admin)</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        
-        <!-- SECTION: SURVEY FORM -->
+        <!-- SURVEY FORM -->
         <div id="survey-section" class="space-y-8 max-w-4xl mx-auto">
-            <!-- Header -->
             <div class="text-center py-8 animate-fade-in">
                 <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">Survey Form</span>
                 <h1 class="text-3xl sm:text-4xl font-extrabold mb-3 text-slate-900">แบบสำรวจความคิดเห็น</h1>
                 <p class="text-slate-500 text-lg">เรื่อง กิจกรรมนอกโรงเรียนดีหรือไม่</p>
             </div>
-
-            <!-- Form Container -->
             <form id="activityForm" class="space-y-8 pb-12">
-                
-                <!-- Q1 Cards -->
+                <!-- Q1 -->
                 <div class="glass-panel p-8 rounded-2xl animate-fade-in" style="animation-delay: 0.1s;">
-                    <div class="flex items-center mb-6">
-                        <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">1</span>
-                        <h3 class="text-lg font-semibold text-slate-800">ประเภทลักษณะกิจกรรมนอกโรงเรียน</h3>
-                    </div>
+                    <div class="flex items-center mb-6"><span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">1</span><h3 class="text-lg font-semibold text-slate-800">ประเภทลักษณะกิจกรรมนอกโรงเรียน</h3></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-blue-50/50 transition-all duration-300 group relative overflow-hidden" onclick="selectOption(this, 'q1')">
-                            <i class="fas fa-hands-helping text-4xl text-rose-500 mb-4 transform group-hover:scale-110 transition-transform"></i>
-                            <span class="font-medium text-slate-700 text-center">จิตอาสา</span>
-                            <input type="radio" name="q1" value="จิตอาสา" class="hidden" required>
-                        </label>
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-amber-50/50 transition-all duration-300 group relative overflow-hidden" onclick="selectOption(this, 'q1')">
-                            <i class="fas fa-book-reader text-4xl text-amber-500 mb-4 transform group-hover:scale-110 transition-transform"></i>
-                            <span class="font-medium text-slate-700 text-center">อบรมวิชาการ</span>
-                            <input type="radio" name="q1" value="อบรมวิชาการ" class="hidden" required>
-                        </label>
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-emerald-50/50 transition-all duration-300 group relative overflow-hidden" onclick="selectOption(this, 'q1')">
-                            <i class="fas fa-trophy text-4xl text-emerald-500 mb-4 transform group-hover:scale-110 transition-transform"></i>
-                            <span class="font-medium text-slate-700 text-center">ประกวดแข่งขันต่างๆ</span>
-                            <input type="radio" name="q1" value="ประกวดแข่งขันต่างๆ" class="hidden" required>
-                        </label>
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-purple-50/50 transition-all duration-300 group relative overflow-hidden" onclick="selectOption(this, 'q1')">
-                            <i class="fas fa-door-open text-4xl text-purple-500 mb-4 transform group-hover:scale-110 transition-transform"></i>
-                            <span class="font-medium text-slate-700 text-center">Open House</span>
-                            <input type="radio" name="q1" value="Open House" class="hidden" required>
-                        </label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-blue-50/50 transition-all option-card" onclick="selectOption(this, 'q1')"><i class="fas fa-hands-helping text-4xl text-rose-500 mb-4"></i><span class="font-medium text-slate-700 text-center">จิตอาสา</span><input type="radio" name="q1" value="จิตอาสา" class="hidden" required></label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-amber-50/50 transition-all option-card" onclick="selectOption(this, 'q1')"><i class="fas fa-book-reader text-4xl text-amber-500 mb-4"></i><span class="font-medium text-slate-700 text-center">อบรมวิชาการ</span><input type="radio" name="q1" value="อบรมวิชาการ" class="hidden" required></label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-emerald-50/50 transition-all option-card" onclick="selectOption(this, 'q1')"><i class="fas fa-trophy text-4xl text-emerald-500 mb-4"></i><span class="font-medium text-slate-700 text-center">ประกวดแข่งขันต่างๆ</span><input type="radio" name="q1" value="ประกวดแข่งขันต่างๆ" class="hidden" required></label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center hover:bg-purple-50/50 transition-all option-card" onclick="selectOption(this, 'q1')"><i class="fas fa-door-open text-4xl text-purple-500 mb-4"></i><span class="font-medium text-slate-700 text-center">Open House</span><input type="radio" name="q1" value="Open House" class="hidden" required></label>
                     </div>
                 </div>
-
-                <!-- Q2 List -->
+                <!-- Q2 -->
                 <div class="glass-panel p-8 rounded-2xl animate-fade-in" style="animation-delay: 0.2s;">
-                    <div class="flex items-center mb-6">
-                        <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">2</span>
-                        <h3 class="text-lg font-semibold text-slate-800">เหตุผลที่เข้าร่วมกิจกรรม</h3>
-                    </div>
+                    <div class="flex items-center mb-6"><span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">2</span><h3 class="text-lg font-semibold text-slate-800">เหตุผลที่เข้าร่วมกิจกรรม</h3></div>
                     <div class="space-y-4">
-                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all group" onclick="selectListOption(this)">
-                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-search-location"></i>
-                            </div>
-                            <span class="font-medium text-slate-700 flex-1">หาประสบการณ์ใหม่ๆ</span>
-                            <input type="radio" name="q2" value="หาประสบการณ์ใหม่ๆ" class="w-5 h-5 text-blue-600" required>
-                        </label>
-                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all group" onclick="selectListOption(this)">
-                             <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mr-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-file-alt"></i>
-                            </div>
-                            <span class="font-medium text-slate-700 flex-1">สะสมผลงานหรือ เกียรติบัตร</span>
-                            <input type="radio" name="q2" value="สะสมผลงานหรือ เกียรติบัตร" class="w-5 h-5 text-blue-600" required>
-                        </label>
-                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all group" onclick="selectListOption(this)">
-                             <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-4 group-hover:bg-red-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-exclamation-circle"></i>
-                            </div>
-                            <span class="font-medium text-slate-700 flex-1">โดนบังคับให้เข้าร่วมกิจกรรม</span>
-                            <input type="radio" name="q2" value="โดนบังคับให้เข้าร่วมกิจกรรม" class="w-5 h-5 text-blue-600" required>
-                        </label>
-                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all group" onclick="selectListOption(this)">
-                             <div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-4 group-hover:bg-green-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-user-friends"></i>
-                            </div>
-                            <span class="font-medium text-slate-700 flex-1">เข้าร่วมตามเพื่อน</span>
-                            <input type="radio" name="q2" value="เข้าร่วมตามเพื่อน" class="w-5 h-5 text-blue-600" required>
-                        </label>
+                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all" onclick="selectListOption(this)"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4"><i class="fas fa-search-location"></i></div><span class="font-medium text-slate-700 flex-1">หาประสบการณ์ใหม่ๆ</span><input type="radio" name="q2" value="หาประสบการณ์ใหม่ๆ" class="w-5 h-5 text-blue-600" required></label>
+                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all" onclick="selectListOption(this)"><div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center mr-4"><i class="fas fa-file-alt"></i></div><span class="font-medium text-slate-700 flex-1">สะสมผลงานหรือ เกียรติบัตร</span><input type="radio" name="q2" value="สะสมผลงานหรือ เกียรติบัตร" class="w-5 h-5 text-blue-600" required></label>
+                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all" onclick="selectListOption(this)"><div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center mr-4"><i class="fas fa-exclamation-circle"></i></div><span class="font-medium text-slate-700 flex-1">โดนบังคับให้เข้าร่วมกิจกรรม</span><input type="radio" name="q2" value="โดนบังคับให้เข้าร่วมกิจกรรม" class="w-5 h-5 text-blue-600" required></label>
+                        <label class="flex items-center p-4 border border-slate-200 rounded-xl hover:bg-slate-50 cursor-pointer transition-all" onclick="selectListOption(this)"><div class="w-10 h-10 rounded-full bg-green-100 text-green-600 flex items-center justify-center mr-4"><i class="fas fa-user-friends"></i></div><span class="font-medium text-slate-700 flex-1">เข้าร่วมตามเพื่อน</span><input type="radio" name="q2" value="เข้าร่วมตามเพื่อน" class="w-5 h-5 text-blue-600" required></label>
                     </div>
                 </div>
-
-                <!-- Q3 Select -->
+                <!-- Q3 -->
                 <div class="glass-panel p-8 rounded-2xl animate-fade-in" style="animation-delay: 0.3s;">
-                    <div class="flex items-center mb-6">
-                        <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">3</span>
-                        <h3 class="text-lg font-semibold text-slate-800">ช่วงเวลาในการเข้าร่วมกิจกรรม</h3>
-                    </div>
+                    <div class="flex items-center mb-6"><span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">3</span><h3 class="text-lg font-semibold text-slate-800">ช่วงเวลาในการเข้าร่วมกิจกรรม</h3></div>
                     <div class="relative">
                         <i class="fas fa-calendar-alt absolute left-4 top-4 text-slate-400"></i>
-                        <select name="q3" class="w-full p-3.5 pl-12 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow appearance-none cursor-pointer" required>
+                        <select name="q3" class="w-full p-3.5 pl-12 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 cursor-pointer" required>
                             <option value="" disabled selected>-- กรุณาเลือกช่วงเวลา --</option>
                             <option value="ช่วงเสาร์-อาทิตย์">ช่วงเสาร์-อาทิตย์</option>
                             <option value="ช่วงปิดภาคเรียน">ช่วงปิดภาคเรียน</option>
@@ -256,307 +100,149 @@
                         <i class="fas fa-chevron-down absolute right-4 top-4 text-slate-400 pointer-events-none"></i>
                     </div>
                 </div>
-
-                <!-- Q4 & Q5 Grid -->
+                <!-- Q4 & Q5 -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Q4 -->
                     <div class="glass-panel p-6 rounded-2xl animate-fade-in" style="animation-delay: 0.4s;">
-                        <div class="flex items-center mb-4">
-                            <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">4</span>
-                            <h3 class="text-lg font-semibold text-slate-800">ความรู้สึกที่ได้เข้าร่วม</h3>
-                        </div>
+                        <div class="flex items-center mb-4"><span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">4</span><h3 class="text-lg font-semibold text-slate-800">ความรู้สึกที่ได้เข้าร่วม</h3></div>
                         <div class="space-y-3">
-                            <label class="flex items-center p-3 rounded-lg hover:bg-green-50 cursor-pointer border border-transparent hover:border-green-200 transition-colors">
-                                <input type="radio" name="q4" value="รู้สึกสนุกและได้ประสบการณ์" class="mr-3 h-4 w-4 text-green-600 focus:ring-green-500" required>
-                                <span class="text-slate-700">รู้สึกสนุกและได้ประสบการณ์</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-lg hover:bg-red-50 cursor-pointer border border-transparent hover:border-red-200 transition-colors">
-                                <input type="radio" name="q4" value="รู้สึกเหนื่อยไม่อยากเข้าร่วม" class="mr-3 h-4 w-4 text-red-600 focus:ring-red-500" required>
-                                <span class="text-slate-700">รู้สึกเหนื่อยไม่อยากเข้าร่วม</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-lg hover:bg-gray-50 cursor-pointer border border-transparent hover:border-gray-200 transition-colors">
-                                <input type="radio" name="q4" value="รู้สึกเฉยๆ" class="mr-3 h-4 w-4 text-gray-600 focus:ring-gray-500" required>
-                                <span class="text-slate-700">รู้สึกเฉยๆ</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-colors">
-                                <input type="radio" name="q4" value="ไม่รู้สึกอะไรเลย" class="mr-3 h-4 w-4 text-slate-600 focus:ring-slate-500" required>
-                                <span class="text-slate-700">ไม่รู้สึกอะไรเลย</span>
-                            </label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-green-50 cursor-pointer"><input type="radio" name="q4" value="รู้สึกสนุกและได้ประสบการณ์" class="mr-3 text-green-600" required><span class="text-slate-700">รู้สึกสนุกและได้ประสบการณ์</span></label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-red-50 cursor-pointer"><input type="radio" name="q4" value="รู้สึกเหนื่อยไม่อยากเข้าร่วม" class="mr-3 text-red-600" required><span class="text-slate-700">รู้สึกเหนื่อยไม่อยากเข้าร่วม</span></label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-gray-50 cursor-pointer"><input type="radio" name="q4" value="รู้สึกเฉยๆ" class="mr-3 text-gray-600" required><span class="text-slate-700">รู้สึกเฉยๆ</span></label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-slate-50 cursor-pointer"><input type="radio" name="q4" value="ไม่รู้สึกอะไรเลย" class="mr-3 text-slate-600" required><span class="text-slate-700">ไม่รู้สึกอะไรเลย</span></label>
                         </div>
                     </div>
-
-                    <!-- Q5 -->
                     <div class="glass-panel p-6 rounded-2xl animate-fade-in" style="animation-delay: 0.5s;">
-                        <div class="flex items-center mb-4">
-                            <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">5</span>
-                            <h3 class="text-lg font-semibold text-slate-800">ความรู้ที่ได้รับ</h3>
-                        </div>
+                        <div class="flex items-center mb-4"><span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">5</span><h3 class="text-lg font-semibold text-slate-800">ความรู้ที่ได้รับ</h3></div>
                         <div class="space-y-3">
-                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer border border-transparent hover:border-indigo-200 transition-colors">
-                                <input type="radio" name="q5" value="ได้มิตรภาพต่างโรงเรียน" class="mr-3 h-4 w-4 text-indigo-600 focus:ring-indigo-500" required>
-                                <span>ได้มิตรภาพต่างโรงเรียน</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer border border-transparent hover:border-indigo-200 transition-colors">
-                                <input type="radio" name="q5" value="เพิ่มทักษะความสามารถความเป็นผู้นำ" class="mr-3 h-4 w-4 text-indigo-600 focus:ring-indigo-500" required>
-                                <span>เพิ่มทักษะความเป็นผู้นำ</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer border border-transparent hover:border-indigo-200 transition-colors">
-                                <input type="radio" name="q5" value="มีความกล้าแสดงออกมากขึ้น" class="mr-3 h-4 w-4 text-indigo-600 focus:ring-indigo-500" required>
-                                <span>มีความกล้าแสดงออกมากขึ้น</span>
-                            </label>
-                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer border border-transparent hover:border-indigo-200 transition-colors">
-                                <input type="radio" name="q5" value="ได้เรียนรู้การทำงานร่วมกับผู้อื่น" class="mr-3 h-4 w-4 text-indigo-600 focus:ring-indigo-500" required>
-                                <span>ได้เรียนรู้การทำงานร่วมกับผู้อื่น</span>
-                            </label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer"><input type="radio" name="q5" value="ได้มิตรภาพต่างโรงเรียน" class="mr-3 text-indigo-600" required><span>ได้มิตรภาพต่างโรงเรียน</span></label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer"><input type="radio" name="q5" value="เพิ่มทักษะความสามารถความเป็นผู้นำ" class="mr-3 text-indigo-600" required><span>เพิ่มทักษะความเป็นผู้นำ</span></label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer"><input type="radio" name="q5" value="มีความกล้าแสดงออกมากขึ้น" class="mr-3 text-indigo-600" required><span>มีความกล้าแสดงออกมากขึ้น</span></label>
+                            <label class="flex items-center p-3 rounded-lg hover:bg-indigo-50 cursor-pointer"><input type="radio" name="q5" value="ได้เรียนรู้การทำงานร่วมกับผู้อื่น" class="mr-3 text-indigo-600" required><span>ได้เรียนรู้การทำงานร่วมกับผู้อื่น</span></label>
                         </div>
                     </div>
                 </div>
-
-                <!-- Q6 Updated -->
+                <!-- Q6 -->
                 <div class="glass-panel p-8 rounded-2xl animate-fade-in" style="animation-delay: 0.6s;">
-                    <div class="flex items-center mb-6">
-                        <span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">6</span>
-                        <h3 class="text-lg font-semibold text-slate-800">กิจกรรมนอกโรงเรียนช่วยพัฒนาด้านอะไรบ้าง</h3>
-                    </div>
+                    <div class="flex items-center mb-6"><span class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3 text-sm">6</span><h3 class="text-lg font-semibold text-slate-800">กิจกรรมนอกโรงเรียนช่วยพัฒนาด้านอะไรบ้าง</h3></div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-blue-50/50 transition-all duration-300 group" onclick="selectOption(this, 'q6')">
-                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-user-tie"></i>
-                            </div>
-                            <span class="font-medium text-slate-700">ด้านความเป็นผู้นำ</span>
-                            <input type="radio" name="q6" value="ด้านความเป็นผู้นำ" class="hidden" required>
-                        </label>
-
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-rose-50/50 transition-all duration-300 group" onclick="selectOption(this, 'q6')">
-                            <div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mr-4 group-hover:bg-rose-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <span class="font-medium text-slate-700">ด้านจิตอาสา</span>
-                            <input type="radio" name="q6" value="ด้านจิตอาสา" class="hidden" required>
-                        </label>
-
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-amber-50/50 transition-all duration-300 group" onclick="selectOption(this, 'q6')">
-                            <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mr-4 group-hover:bg-amber-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-graduation-cap"></i>
-                            </div>
-                            <span class="font-medium text-slate-700">ด้านวิชาการ</span>
-                            <input type="radio" name="q6" value="ด้านวิชาการ" class="hidden" required>
-                        </label>
-
-                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-emerald-50/50 transition-all duration-300 group" onclick="selectOption(this, 'q6')">
-                             <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mr-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                                <i class="fas fa-balance-scale"></i>
-                            </div>
-                            <span class="font-medium text-slate-700">ด้านคุณธรรมจริยธรรม</span>
-                            <input type="radio" name="q6" value="ด้านคุณธรรมจริยธรรม" class="hidden" required>
-                        </label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-blue-50/50 transition-all option-card" onclick="selectOption(this, 'q6')"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-4"><i class="fas fa-user-tie"></i></div><span class="font-medium text-slate-700">ด้านความเป็นผู้นำ</span><input type="radio" name="q6" value="ด้านความเป็นผู้นำ" class="hidden" required></label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-rose-50/50 transition-all option-card" onclick="selectOption(this, 'q6')"><div class="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mr-4"><i class="fas fa-heart"></i></div><span class="font-medium text-slate-700">ด้านจิตอาสา</span><input type="radio" name="q6" value="ด้านจิตอาสา" class="hidden" required></label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-amber-50/50 transition-all option-card" onclick="selectOption(this, 'q6')"><div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center mr-4"><i class="fas fa-graduation-cap"></i></div><span class="font-medium text-slate-700">ด้านวิชาการ</span><input type="radio" name="q6" value="ด้านวิชาการ" class="hidden" required></label>
+                        <label class="cursor-pointer border-2 border-slate-100 rounded-xl p-4 flex items-center hover:bg-emerald-50/50 transition-all option-card" onclick="selectOption(this, 'q6')"><div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mr-4"><i class="fas fa-balance-scale"></i></div><span class="font-medium text-slate-700">ด้านคุณธรรมจริยธรรม</span><input type="radio" name="q6" value="ด้านคุณธรรมจริยธรรม" class="hidden" required></label>
                     </div>
                 </div>
-
-                <!-- Submit -->
                 <div class="text-center pt-8 animate-fade-in" style="animation-delay: 0.7s;">
-                    <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 px-12 rounded-full shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 hover:-translate-y-1 transition-all transform focus:outline-none focus:ring-4 focus:ring-blue-300 text-lg">
-                        <i class="fas fa-paper-plane mr-2"></i> ส่งแบบสอบถาม
-                    </button>
+                    <button type="submit" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold py-4 px-12 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"><i class="fas fa-paper-plane mr-2"></i> ส่งแบบสอบถาม</button>
                     <p class="mt-6 text-xs text-slate-400 uppercase tracking-widest" id="mode-indicator">Mode: Simulation</p>
                 </div>
-
             </form>
         </div>
 
-        <!-- SECTION: DASHBOARD -->
+        <!-- DASHBOARD -->
         <div id="dashboard-section" class="hidden pb-12">
-            <!-- Dashboard Toolbar -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 animate-fade-in no-print">
                 <div>
                     <div class="flex items-center gap-3">
                         <h1 class="text-3xl font-extrabold text-slate-900">Dashboard Overview</h1>
                         <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded border border-blue-200"><i class="fas fa-lock mr-1"></i>Secure Area</span>
                     </div>
-                    <p class="text-slate-500">รายงานสรุปผลข้อมูลสถิติแบบเรียลไทม์ (ละเอียด 6 ข้อ)</p>
+                    <p class="text-slate-500">รายงานสรุปผลข้อมูลสถิติแบบละเอียดและเจาะลึก (Deep Analysis)</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                    <button onclick="logoutDashboard()" class="bg-red-50 border border-red-200 text-red-600 py-2 px-4 rounded-lg shadow-sm hover:bg-red-100 transition-all text-sm font-medium">
-                        <i class="fas fa-sign-out-alt mr-2"></i> ออกจากระบบ
-                    </button>
-                    <button onclick="refreshDashboard()" class="bg-white border border-slate-300 text-slate-700 py-2 px-4 rounded-lg shadow-sm hover:bg-slate-50 transition-all text-sm font-medium">
-                        <i class="fas fa-sync-alt mr-2 text-blue-500"></i> รีเฟรช
-                    </button>
-                    <button onclick="exportToCSV()" class="bg-white border border-slate-300 text-slate-700 py-2 px-4 rounded-lg shadow-sm hover:bg-slate-50 transition-all text-sm font-medium">
-                        <i class="fas fa-file-csv mr-2 text-green-600"></i> Export CSV
-                    </button>
-                    <button onclick="window.print()" class="bg-slate-800 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-slate-700 transition-all text-sm font-medium">
-                        <i class="fas fa-print mr-2"></i> พิมพ์รายงาน PDF
-                    </button>
+                    <button onclick="logoutDashboard()" class="bg-red-50 border border-red-200 text-red-600 py-2 px-4 rounded-lg shadow-sm hover:bg-red-100"><i class="fas fa-sign-out-alt mr-2"></i> ออกจากระบบ</button>
+                    <button onclick="refreshDashboard()" class="bg-white border border-slate-300 text-slate-700 py-2 px-4 rounded-lg shadow-sm hover:bg-slate-50"><i class="fas fa-sync-alt mr-2 text-blue-500"></i> รีเฟรช</button>
+                    <button onclick="exportToCSV()" class="bg-white border border-slate-300 text-slate-700 py-2 px-4 rounded-lg shadow-sm hover:bg-slate-50"><i class="fas fa-file-csv mr-2 text-green-600"></i> Export CSV</button>
+                    <button onclick="window.print()" class="bg-slate-800 text-white py-2 px-4 rounded-lg shadow-lg hover:bg-slate-700"><i class="fas fa-print mr-2"></i> พิมพ์รายงาน PDF</button>
                 </div>
             </div>
 
             <!-- KPI Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
-                <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-500 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">ผู้ตอบทั้งหมด</p>
-                        <h3 class="text-3xl font-extrabold text-slate-800" id="kpi-total">0</h3>
-                    </div>
-                    <div class="p-4 bg-blue-50 rounded-2xl text-blue-600"><i class="fas fa-users text-2xl"></i></div>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl border-l-4 border-green-500 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">ดัชนีความสุข</p>
-                        <h3 class="text-3xl font-extrabold text-slate-800" id="kpi-satisfaction">0%</h3>
-                    </div>
-                    <div class="p-4 bg-green-50 rounded-2xl text-green-600"><i class="fas fa-smile-beam text-2xl"></i></div>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl border-l-4 border-amber-500 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">กิจกรรมยอดนิยม</p>
-                        <h3 class="text-xl font-bold text-slate-800 truncate max-w-[120px]" id="kpi-top-activity">-</h3>
-                    </div>
-                    <div class="p-4 bg-amber-50 rounded-2xl text-amber-600"><i class="fas fa-crown text-2xl"></i></div>
-                </div>
-                <div class="glass-panel p-6 rounded-2xl border-l-4 border-purple-500 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs text-slate-500 uppercase font-bold tracking-wider mb-1">ด้านที่พัฒนาสูงสุด</p>
-                        <h3 class="text-lg font-bold text-slate-800 truncate max-w-[140px]" id="kpi-top-benefit">-</h3>
-                    </div>
-                    <div class="p-4 bg-purple-50 rounded-2xl text-purple-600"><i class="fas fa-chart-bar text-2xl"></i></div>
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-blue-500 flex items-center justify-between"><div><p class="text-xs text-slate-500 font-bold mb-1">ผู้ตอบทั้งหมด</p><h3 class="text-3xl font-extrabold text-slate-800" id="kpi-total">0</h3></div><div class="p-4 bg-blue-50 rounded-2xl text-blue-600"><i class="fas fa-users text-2xl"></i></div></div>
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-green-500 flex items-center justify-between"><div><p class="text-xs text-slate-500 font-bold mb-1">ดัชนีความสุข</p><h3 class="text-3xl font-extrabold text-slate-800" id="kpi-satisfaction">0%</h3></div><div class="p-4 bg-green-50 rounded-2xl text-green-600"><i class="fas fa-smile-beam text-2xl"></i></div></div>
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-amber-500 flex items-center justify-between"><div><p class="text-xs text-slate-500 font-bold mb-1">กิจกรรมยอดนิยม</p><h3 class="text-xl font-bold text-slate-800 truncate max-w-[120px]" id="kpi-top-activity">-</h3></div><div class="p-4 bg-amber-50 rounded-2xl text-amber-600"><i class="fas fa-crown text-2xl"></i></div></div>
+                <div class="glass-panel p-6 rounded-2xl border-l-4 border-purple-500 flex items-center justify-between"><div><p class="text-xs text-slate-500 font-bold mb-1">ด้านที่พัฒนาสูงสุด</p><h3 class="text-lg font-bold text-slate-800 truncate max-w-[140px]" id="kpi-top-benefit">-</h3></div><div class="p-4 bg-purple-50 rounded-2xl text-purple-600"><i class="fas fa-chart-bar text-2xl"></i></div></div>
+            </div>
+
+            <!-- Main Charts (Q1-Q6) -->
+            <div class="mb-10 animate-fade-in">
+                <h2 class="text-xl font-bold text-slate-800 mb-4 border-l-4 border-blue-500 pl-3">สถิติรายข้อ (Basic Statistics)</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glass-panel p-6 rounded-2xl relative group"><div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-chart-pie mr-2 text-blue-500"></i> ข้อ 1: ประเภทกิจกรรม</h3><div class="chart-controls" id="ctrl-q1"></div></div><div class="h-72 flex justify-center"><canvas id="chartType"></canvas></div></div>
+                    <div class="glass-panel p-6 rounded-2xl relative group"><div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-flag-checkered mr-2 text-rose-500"></i> ข้อ 2: เหตุผลที่เข้าร่วม</h3><div class="chart-controls" id="ctrl-q2"></div></div><div class="h-72"><canvas id="chartMotivation"></canvas></div></div>
+                    <div class="glass-panel p-6 rounded-2xl relative group"><div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-clock mr-2 text-amber-500"></i> ข้อ 3: ช่วงเวลา</h3><div class="chart-controls" id="ctrl-q3"></div></div><div class="h-72 flex justify-center"><canvas id="chartTime"></canvas></div></div>
+                    <div class="glass-panel p-6 rounded-2xl relative group"><div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-smile mr-2 text-green-500"></i> ข้อ 4: ความรู้สึก</h3><div class="chart-controls" id="ctrl-q4"></div></div><div class="h-72 flex justify-center"><canvas id="chartFeelings"></canvas></div></div>
+                    <div class="glass-panel p-6 rounded-2xl relative group"><div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-brain mr-2 text-indigo-500"></i> ข้อ 5: ความรู้ที่ได้รับ</h3><div class="chart-controls" id="ctrl-q5"></div></div><div class="h-72 flex justify-center"><canvas id="chartSkills"></canvas></div></div>
+                    <div class="glass-panel p-6 rounded-2xl relative group"><div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-chart-bar mr-2 text-purple-500"></i> ข้อ 6: ด้านที่พัฒนา</h3><div class="chart-controls" id="ctrl-q6"></div></div><div class="h-72 flex justify-center"><canvas id="chartBenefit"></canvas></div></div>
                 </div>
             </div>
 
-            <!-- Charts Grid (All 6 Questions) -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                
-                <!-- Q1 Chart -->
-                <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-chart-pie mr-2 text-blue-500"></i> ข้อ 1: ประเภทกิจกรรม</h3>
-                        <div class="chart-controls" id="ctrl-q1"></div>
+            <!-- Advanced Analysis (NEW SECTION) -->
+            <div class="mb-10 animate-fade-in">
+                <h2 class="text-xl font-bold text-slate-800 mb-4 border-l-4 border-indigo-500 pl-3">วิเคราะห์ความสัมพันธ์ (Cross-Tabulation & Advanced Analysis)</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Advanced Chart 1: Relation between Activity Type vs Feeling -->
+                    <div class="glass-panel p-6 rounded-2xl relative group">
+                        <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
+                            <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-project-diagram mr-2 text-indigo-500"></i> ความสัมพันธ์: กิจกรรม vs ความรู้สึก</h3>
+                            <p class="text-xs text-gray-400">เปรียบเทียบว่าคนที่ทำกิจกรรมแต่ละประเภท รู้สึกอย่างไรกันบ้าง</p>
+                        </div>
+                        <div class="h-80">
+                            <canvas id="chartRelation1"></canvas>
+                        </div>
                     </div>
-                    <div class="h-72 flex justify-center">
-                        <canvas id="chartType"></canvas>
-                    </div>
-                </div>
 
-                <!-- Q2 Chart -->
-                <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-flag-checkered mr-2 text-rose-500"></i> ข้อ 2: เหตุผลที่เข้าร่วม</h3>
-                        <div class="chart-controls" id="ctrl-q2"></div>
+                    <!-- Advanced Chart 2: Time vs Benefit -->
+                    <div class="glass-panel p-6 rounded-2xl relative group">
+                        <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
+                            <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-hourglass-half mr-2 text-pink-500"></i> ความสัมพันธ์: ช่วงเวลา vs สิ่งที่พัฒนา</h3>
+                            <p class="text-xs text-gray-400">ช่วงเวลาไหนส่งเสริมด้านใดมากที่สุด</p>
+                        </div>
+                        <div class="h-80">
+                            <canvas id="chartRelation2"></canvas>
+                        </div>
                     </div>
-                    <div class="h-72">
-                        <canvas id="chartMotivation"></canvas>
-                    </div>
-                </div>
 
-                <!-- Q3 Chart -->
-                <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-clock mr-2 text-amber-500"></i> ข้อ 3: ช่วงเวลา</h3>
-                        <div class="chart-controls" id="ctrl-q3"></div>
-                    </div>
-                    <div class="h-72 flex justify-center">
-                        <canvas id="chartTime"></canvas>
-                    </div>
-                </div>
-
-                <!-- Q4 Chart (New) -->
-                <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-smile mr-2 text-green-500"></i> ข้อ 4: ความรู้สึก</h3>
-                        <div class="chart-controls" id="ctrl-q4"></div>
-                    </div>
-                    <div class="h-72 flex justify-center">
-                        <canvas id="chartFeelings"></canvas>
-                    </div>
-                </div>
-
-                <!-- Q5 Chart -->
-                <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-brain mr-2 text-indigo-500"></i> ข้อ 5: ความรู้ที่ได้รับ</h3>
-                        <div class="chart-controls" id="ctrl-q5"></div>
-                    </div>
-                    <div class="h-72 flex justify-center">
-                        <canvas id="chartSkills"></canvas>
-                    </div>
-                </div>
-
-                <!-- Q6 Chart (New) -->
-                <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-chart-bar mr-2 text-purple-500"></i> ข้อ 6: ด้านที่พัฒนา</h3>
-                        <div class="chart-controls" id="ctrl-q6"></div>
-                    </div>
-                    <div class="h-72 flex justify-center">
-                        <canvas id="chartBenefit"></canvas>
-                    </div>
                 </div>
             </div>
 
-            <!-- Summary Highlights (NEW) -->
-            <div class="glass-panel p-6 rounded-2xl mb-8 animate-fade-in relative group">
-                <div class="flex items-center mb-6 border-b border-slate-100 pb-2">
-                    <h3 class="font-bold text-slate-700 text-lg"><i class="fas fa-lightbulb text-yellow-500 mr-2"></i> บทสรุปไฮไลท์ (Key Insights)</h3>
+            <!-- Summary Text Generator -->
+            <div class="glass-panel p-6 rounded-2xl mb-8 animate-fade-in relative group bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-100">
+                <div class="flex items-center mb-4">
+                    <h3 class="font-bold text-slate-700 text-lg"><i class="fas fa-robot text-blue-500 mr-2"></i> สรุปผลการวิเคราะห์อัตโนมัติ (AI Generated Summary)</h3>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="summary-cards">
-                    <!-- JS will populate this -->
+                <div class="prose prose-sm max-w-none text-slate-600 bg-white/50 p-4 rounded-xl border border-blue-100 leading-relaxed" id="auto-summary-text">
+                    กำลังประมวลผลข้อมูล...
                 </div>
             </div>
 
-            <!-- Trend & Data Table -->
+            <!-- Trend -->
             <div class="grid grid-cols-1 gap-8 mb-8">
-                <!-- Trend Chart -->
                 <div class="glass-panel p-6 rounded-2xl relative group">
-                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col">
-                        <h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-chart-line mr-2 text-slate-500"></i> สถิติความพึงพอใจรายวัน</h3>
-                        <div class="chart-controls" id="ctrl-trend"></div>
-                    </div>
-                    <div class="h-64">
-                        <canvas id="chartTrend"></canvas>
-                    </div>
+                    <div class="flex justify-between items-start mb-4 pb-2 border-b border-slate-100 flex-col"><h3 class="font-bold text-slate-700 mb-2"><i class="fas fa-chart-line mr-2 text-slate-500"></i> สถิติความพึงพอใจรายวัน</h3><div class="chart-controls" id="ctrl-trend"></div></div><div class="h-64"><canvas id="chartTrend"></canvas></div>
                 </div>
             </div>
 
-            <!-- Data Table Toggle -->
-            <div class="mt-12 no-print">
-                <button onclick="document.getElementById('dataTableSection').classList.toggle('hidden')" class="text-slate-500 hover:text-blue-600 font-medium text-sm flex items-center">
-                    <i class="fas fa-table mr-2"></i> แสดง/ซ่อน ตารางข้อมูลดิบ
-                </button>
-            </div>
-
-            <!-- Raw Data Table -->
+            <!-- Toggle Table -->
+            <div class="mt-12 no-print"><button onclick="document.getElementById('dataTableSection').classList.toggle('hidden')" class="text-slate-500 hover:text-blue-600 font-medium text-sm flex items-center"><i class="fas fa-table mr-2"></i> แสดง/ซ่อน ตารางข้อมูลดิบ</button></div>
+            <!-- Raw Table -->
             <div id="dataTableSection" class="hidden mt-4 overflow-x-auto glass-panel rounded-xl p-4 animate-fade-in no-print">
                 <table class="min-w-full text-sm text-left text-slate-600">
-                    <thead class="text-xs text-slate-700 uppercase bg-slate-100">
-                        <tr>
-                            <th class="px-6 py-3 rounded-l-lg">เวลา</th>
-                            <th class="px-6 py-3">ประเภท</th>
-                            <th class="px-6 py-3">แรงจูงใจ</th>
-                            <th class="px-6 py-3">ช่วงเวลา</th>
-                            <th class="px-6 py-3">ความรู้สึก</th>
-                            <th class="px-6 py-3">ความรู้</th>
-                            <th class="px-6 py-3 rounded-r-lg">ด้านที่พัฒนา</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dataTableBody">
-                        <!-- Rows injected via JS -->
-                    </tbody>
+                    <thead class="text-xs text-slate-700 uppercase bg-slate-100"><tr><th class="px-6 py-3">เวลา</th><th class="px-6 py-3">ประเภท</th><th class="px-6 py-3">แรงจูงใจ</th><th class="px-6 py-3">ช่วงเวลา</th><th class="px-6 py-3">ความรู้สึก</th><th class="px-6 py-3">ความรู้</th><th class="px-6 py-3">ด้านที่พัฒนา</th></tr></thead>
+                    <tbody id="dataTableBody"></tbody>
                 </table>
             </div>
-
         </div>
     </main>
 
-    <footer class="bg-white border-t border-slate-200 py-8 mt-12 no-print">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="font-bold text-slate-800">Activity Insight Pro</p>
-            <p class="text-slate-400 text-sm mt-1">© 2024 ระบบจัดเก็บและวิเคราะห์ข้อมูลกิจกรรมนักเรียน</p>
-        </div>
-    </footer>
+    <footer class="bg-white border-t border-slate-200 py-8 mt-12 no-print"><div class="max-w-7xl mx-auto px-4 text-center"><p class="font-bold text-slate-800">Activity Insight Pro</p><p class="text-slate-400 text-sm mt-1">© 2024 ระบบจัดเก็บและวิเคราะห์ข้อมูลกิจกรรมนักเรียน</p></div></footer>
 
-    <!-- LOGIC -->
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzDKRVL9lcVrCDWoXf5wpCBFr2jd8zIQmF_RocTgi_3OqOvdciGuQ8D5wQH3idxH53a/exec'; 
+        // *** ใส่ URL ใหม่ที่ได้จากการ Deploy ล่าสุดตรงนี้ ***
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxq63XnqZzEcCfeZy93aKwOI_q5Twb0XEIhV0aDK51UqF1wBHBA0_7rJjcbGTYwWyaZ/exec'; 
+        
+        // ถ้าไม่มี URL จะใช้โหมดจำลอง
         let USE_MOCK_DATA = SCRIPT_URL === '';
         let chartInstances = {};
         let surveyData = [];
@@ -565,59 +251,92 @@
         let chartDataStore = {}; 
 
         document.addEventListener('DOMContentLoaded', () => {
-            setupChartControls(); // Initialize controls for all charts
+            setupChartControls();
             if(USE_MOCK_DATA) {
                 generateMockData(50);
                 document.getElementById('mode-indicator').innerText = "Simulation Mode";
                 document.getElementById('mode-indicator').className = "mt-6 text-xs text-amber-500 font-bold uppercase tracking-widest";
+                updateDashboard();
             } else {
                 document.getElementById('mode-indicator').innerHTML = '<i class="fas fa-wifi text-green-500 mr-1"></i> Online Mode: Connected to Google Sheets';
                 document.getElementById('mode-indicator').className = "mt-6 text-xs text-green-600 font-bold uppercase tracking-widest";
+                fetchDataFromSheets(); 
             }
-            updateDashboard();
         });
 
-        // --- CHART CONTROLS SETUP ---
-        function setupChartControls() {
-            const charts = [
-                { id: 'chartType', div: 'ctrl-q1' },
-                { id: 'chartMotivation', div: 'ctrl-q2' },
-                { id: 'chartTime', div: 'ctrl-q3' },
-                { id: 'chartFeelings', div: 'ctrl-q4' },
-                { id: 'chartSkills', div: 'ctrl-q5' },
-                { id: 'chartBenefit', div: 'ctrl-q6' },
-                { id: 'chartTrend', div: 'ctrl-trend' }
-            ];
-
-            const types = [
-                { type: 'bar', opts: {indexAxis:'x'}, icon: 'fa-chart-bar', title: 'Bar (Vert)' },
-                { type: 'bar', opts: {indexAxis:'y'}, icon: 'fa-list', title: 'Bar (Horiz)' },
-                { type: 'pie', opts: {}, icon: 'fa-chart-pie', title: 'Pie' },
-                { type: 'doughnut', opts: {}, icon: 'far fa-circle', title: 'Doughnut' },
-                { type: 'line', opts: {fill:false, tension:0.4}, icon: 'fa-chart-line', title: 'Line (Curve)' },
-                { type: 'line', opts: {fill:false, tension:0}, icon: 'fa-wave-square', title: 'Line (Straight)' },
-                { type: 'line', opts: {fill:true, tension:0.4}, icon: 'fa-chart-area', title: 'Area' },
-                { type: 'line', opts: {stepped:true}, icon: 'fa-stream', title: 'Stepped' },
-                { type: 'radar', opts: {}, icon: 'fa-bullseye', title: 'Radar' },
-                { type: 'polarArea', opts: {}, icon: 'far fa-snowflake', title: 'Polar' }
-            ];
-
-            charts.forEach(c => {
-                const container = document.getElementById(c.div);
-                let html = '';
-                types.forEach(t => {
-                    // Serialize options for onclick
-                    const optsStr = JSON.stringify(t.opts).replace(/"/g, "&quot;");
-                    html += `<button onclick="changeChartType('${c.id}', '${t.type}', ${optsStr})" class="chart-btn" title="${t.title}"><i class="fas ${t.icon}"></i></button>`;
+        async function fetchDataFromSheets() {
+            if(USE_MOCK_DATA) { updateDashboard(); return; }
+            const isManualRefresh = document.getElementById('dashboard-section').classList.contains('hidden') === false;
+            if(isManualRefresh) {
+               document.getElementById('loading-overlay').style.display = 'flex';
+               document.getElementById('loading-text').innerText = 'กำลังดึงข้อมูลล่าสุดจาก Google Sheets...';
+            }
+            try {
+                const response = await fetch(SCRIPT_URL + '?t=' + new Date().getTime(), {
+                    method: 'GET',
+                    redirect: 'follow'
                 });
-                // Add Download
-                html += `<div class="w-px h-6 bg-slate-200 mx-1 self-center"></div>`;
-                html += `<button onclick="downloadChart('${c.id}')" class="chart-btn download-btn" title="Download Image"><i class="fas fa-download"></i></button>`;
-                container.innerHTML = html;
+                if (!response.ok) throw new Error(`HTTP Status: ${response.status}`);
+                const data = await response.json();
+                if (data && Array.isArray(data)) {
+                    surveyData = data; 
+                    console.log("Fetched " + surveyData.length + " rows");
+                    if(isManualRefresh) {
+                        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
+                        Toast.fire({ icon: 'success', title: 'อัปเดตข้อมูลเรียบร้อย' });
+                    }
+                }
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                if(isManualRefresh) {
+                    Swal.fire({
+                        title: 'ดึงข้อมูลไม่สำเร็จ',
+                        html: `<div class="text-left text-sm"><p class="mb-2 text-red-600 font-bold">เกิดข้อผิดพลาด: ${error.message}</p><p class="mb-2">สาเหตุหลักที่พบบ่อย:</p><ul class="list-disc pl-5 space-y-1"><li><b>สิทธิ์การเข้าถึงผิด (สำคัญมาก!):</b> ต้องตั้งค่าการ Deploy ให้ <b>"ผู้มีสิทธิ์เข้าถึง (Who has access)"</b> เป็น <b>"ทุกคน (Anyone)"</b> เท่านั้น</li></ul></div>`,
+                        icon: 'error'
+                    });
+                }
+            } finally {
+                document.getElementById('loading-overlay').style.display = 'none';
+                updateDashboard();
+            }
+        }
+
+        document.getElementById('activityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
+            data.timestamp = new Date().toLocaleString('th-TH');
+            document.getElementById('loading-overlay').style.display = 'flex';
+            document.getElementById('loading-text').innerText = 'กำลังบันทึกข้อมูล...';
+            if (USE_MOCK_DATA) {
+                setTimeout(() => { surveyData.push(data); finishSubmission(); }, 1000);
+            } else {
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                })
+                .then(() => { surveyData.push(data); finishSubmission(); })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('loading-overlay').style.display = 'none';
+                    Swal.fire('Error', 'ไม่สามารถส่งข้อมูลได้', 'error');
+                });
+            }
+        });
+
+        function finishSubmission() {
+            document.getElementById('loading-overlay').style.display = 'none';
+            Swal.fire({ title: 'บันทึกสำเร็จ!', text: 'ขอบคุณที่ร่วมตอบแบบสอบถาม', icon: 'success', timer: 2000, showConfirmButton: false }).then(() => {
+                document.getElementById('activityForm').reset();
+                document.querySelectorAll('.radio-selected').forEach(el => { el.classList.remove('radio-selected', 'border-blue-300'); el.classList.add('border-slate-100'); });
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if(!USE_MOCK_DATA) fetchDataFromSheets(); 
             });
         }
 
-        // --- NAVIGATION & UI ---
         function switchTab(tab) {
             if (tab === 'dashboard') {
                 if (!isAuthenticated) {
@@ -629,9 +348,7 @@
                         confirmButtonText: 'เข้าสู่ระบบ',
                         cancelButtonText: 'ยกเลิก',
                         confirmButtonColor: '#2563eb',
-                        preConfirm: (login) => {
-                            if (login !== DASHBOARD_PIN) Swal.showValidationMessage('รหัสผ่านไม่ถูกต้อง')
-                        }
+                        preConfirm: (login) => { if (login !== DASHBOARD_PIN) Swal.showValidationMessage('รหัสผ่านไม่ถูกต้อง') }
                     }).then((result) => {
                         if (result.isConfirmed) {
                             isAuthenticated = true;
@@ -639,12 +356,8 @@
                             Swal.fire({ icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', toast: true, position: 'top-end', showConfirmButton: false, timer: 3000 });
                         }
                     })
-                } else {
-                    activateDashboardView();
-                }
-            } else {
-                activateSurveyView();
-            }
+                } else { activateDashboardView(); }
+            } else { activateSurveyView(); }
         }
 
         function activateDashboardView() {
@@ -652,8 +365,6 @@
             document.getElementById('dashboard-section').classList.remove('hidden');
             document.getElementById('nav-dashboard').className = "nav-active px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center";
             document.getElementById('nav-survey').className = "text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-4 py-2 text-sm font-medium transition-all duration-200 rounded-lg flex items-center";
-            
-            // Try to fetch real data when entering dashboard
             fetchDataFromSheets();
         }
 
@@ -672,163 +383,35 @@
 
         function refreshDashboard() {
             const btn = document.querySelector('button[onclick="refreshDashboard()"] i');
-            if(btn) {
-                btn.classList.add('fa-spin');
-                setTimeout(() => btn.classList.remove('fa-spin'), 1000);
-            }
+            if(btn) { btn.classList.add('fa-spin'); setTimeout(() => btn.classList.remove('fa-spin'), 1000); }
             fetchDataFromSheets();
         }
 
         function selectOption(element, groupName) {
-            document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => {
-                input.parentElement.classList.remove('radio-selected');
-                input.parentElement.classList.add('border-slate-100');
-            });
-            element.classList.add('radio-selected');
-            element.classList.remove('border-slate-100');
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(input => { input.parentElement.classList.remove('radio-selected'); input.parentElement.classList.add('border-slate-100'); });
+            element.classList.add('radio-selected'); element.classList.remove('border-slate-100');
             element.querySelector('input').checked = true;
         }
-
         function selectListOption(element) {
             const radio = element.querySelector('input');
-            document.querySelectorAll(`input[name="${radio.name}"]`).forEach(input => {
-                input.parentElement.classList.remove('radio-selected', 'border-blue-300');
-                input.parentElement.classList.add('border-slate-200');
-            });
-            element.classList.add('radio-selected', 'border-blue-300');
-            element.classList.remove('border-slate-200');
+            document.querySelectorAll(`input[name="${radio.name}"]`).forEach(input => { input.parentElement.classList.remove('radio-selected', 'border-blue-300'); input.parentElement.classList.add('border-slate-200'); });
+            element.classList.add('radio-selected', 'border-blue-300'); element.classList.remove('border-slate-200');
             radio.checked = true;
         }
+        function countBy(key) { return surveyData.reduce((acc, curr) => { acc[curr[key]] = (acc[curr[key]] || 0) + 1; return acc; }, {}); }
 
-        // --- SUBMIT ---
-        document.getElementById('activityForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const formData = new FormData(this);
-            const data = {};
-            formData.forEach((value, key) => data[key] = value);
-            data.timestamp = new Date().toLocaleString('th-TH');
-
-            document.getElementById('loading-overlay').style.display = 'flex';
-            document.getElementById('loading-text').innerText = 'กำลังบันทึกข้อมูล...';
-
-            if (USE_MOCK_DATA) {
-                setTimeout(() => { surveyData.push(data); finishSubmission(); }, 1000);
-            } else {
-                fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                })
-                .then(() => { 
-                    // Add locally for immediate feedback, but ideally we refresh
-                    surveyData.push(data); 
-                    finishSubmission(); 
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('loading-overlay').style.display = 'none';
-                    Swal.fire('Error', 'ไม่สามารถส่งข้อมูลได้', 'error');
-                });
-            }
-        });
-
-        function finishSubmission() {
-            document.getElementById('loading-overlay').style.display = 'none';
-            Swal.fire({
-                title: 'บันทึกสำเร็จ!',
-                text: 'ขอบคุณที่ร่วมตอบแบบสอบถาม (ระบบจะรีเฟรชฟอร์มอัตโนมัติ)',
-                icon: 'success',
-                timer: 3000,
-                timerProgressBar: true,
-                showConfirmButton: false
-            }).then(() => {
-                document.getElementById('activityForm').reset();
-                document.querySelectorAll('.radio-selected').forEach(el => {
-                    el.classList.remove('radio-selected', 'border-blue-300');
-                    el.classList.add('border-slate-100');
-                });
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+        function setupChartControls() {
+            const charts = [ { id: 'chartType', div: 'ctrl-q1' }, { id: 'chartMotivation', div: 'ctrl-q2' }, { id: 'chartTime', div: 'ctrl-q3' }, { id: 'chartFeelings', div: 'ctrl-q4' }, { id: 'chartSkills', div: 'ctrl-q5' }, { id: 'chartBenefit', div: 'ctrl-q6' }, { id: 'chartTrend', div: 'ctrl-trend' } ];
+            const types = [ { type: 'bar', opts: {indexAxis:'x'}, icon: 'fa-chart-bar', title: 'Bar (Vert)' }, { type: 'bar', opts: {indexAxis:'y'}, icon: 'fa-list', title: 'Bar (Horiz)' }, { type: 'pie', opts: {}, icon: 'fa-chart-pie', title: 'Pie' }, { type: 'doughnut', opts: {}, icon: 'far fa-circle', title: 'Doughnut' }, { type: 'line', opts: {fill:false, tension:0.4}, icon: 'fa-chart-line', title: 'Line (Curve)' }, { type: 'line', opts: {fill:false, tension:0}, icon: 'fa-wave-square', title: 'Line (Straight)' }, { type: 'line', opts: {fill:true, tension:0.4}, icon: 'fa-chart-area', title: 'Area' }, { type: 'line', opts: {stepped:true}, icon: 'fa-stream', title: 'Stepped' }, { type: 'radar', opts: {}, icon: 'fa-bullseye', title: 'Radar' }, { type: 'polarArea', opts: {}, icon: 'far fa-snowflake', title: 'Polar' } ];
+            charts.forEach(c => {
+                const container = document.getElementById(c.div);
+                let html = '';
+                types.forEach(t => { const optsStr = JSON.stringify(t.opts).replace(/"/g, "&quot;"); html += `<button onclick="changeChartType('${c.id}', '${t.type}', ${optsStr})" class="chart-btn" title="${t.title}"><i class="fas ${t.icon}"></i></button>`; });
+                html += `<div class="w-px h-6 bg-slate-200 mx-1 self-center"></div><button onclick="downloadChart('${c.id}')" class="chart-btn download-btn" title="Download Image"><i class="fas fa-download"></i></button>`;
+                container.innerHTML = html;
             });
         }
 
-        // --- DATA FETCHING (NEW) ---
-        async function fetchDataFromSheets() {
-            if(USE_MOCK_DATA) {
-                updateDashboard();
-                return;
-            }
-
-            document.getElementById('loading-overlay').style.display = 'flex';
-            document.getElementById('loading-text').innerText = 'กำลังดึงข้อมูลทั้งหมด...';
-
-            try {
-                // Fetch data via GET request (requires GAS `doGet` implementation)
-                const response = await fetch(SCRIPT_URL);
-                const data = await response.json();
-                
-                if (data && Array.isArray(data)) {
-                    surveyData = data; // Replace local data with server data
-                    console.log("Fetched " + surveyData.length + " rows");
-                }
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                // Fail silently or show toast? For now just use what we have or mock
-                // Swal.fire('แจ้งเตือน', 'ไม่สามารถดึงข้อมูลเก่าได้ (ใช้ข้อมูลที่เพิ่งกรอกแทน)', 'warning');
-            } finally {
-                document.getElementById('loading-overlay').style.display = 'none';
-                updateDashboard();
-            }
-        }
-
-        // --- CHART ACTIONS ---
-        function downloadChart(canvasId) {
-            const canvas = document.getElementById(canvasId);
-            const link = document.createElement('a');
-            link.download = `${canvasId}-export.png`;
-            link.href = canvas.toDataURL('image/png', 1.0);
-            link.click();
-        }
-
-        function changeChartType(canvasId, newType, extraOptions = {}) {
-            if (!chartDataStore[canvasId]) return;
-            const stored = chartDataStore[canvasId];
-            
-            // Clean up indexAxis
-            let finalOptions = { ...stored.options, ...extraOptions };
-            if (newType !== 'bar') { delete finalOptions.indexAxis; }
-            
-            // For line charts, apply fill/stepped/tension to dataset
-            const newData = JSON.parse(JSON.stringify(stored.data)); // Deep copy
-            if(newType === 'line' || newType === 'radar') {
-                newData.datasets.forEach(ds => {
-                    if(extraOptions.fill !== undefined) ds.fill = extraOptions.fill;
-                    if(extraOptions.tension !== undefined) ds.tension = extraOptions.tension;
-                    if(extraOptions.stepped !== undefined) ds.stepped = extraOptions.stepped;
-                });
-            }
-
-            createOrUpdateChart(canvasId, newType, newData, finalOptions);
-        }
-
-        function exportToCSV() {
-            if(surveyData.length === 0) { Swal.fire('ไม่มีข้อมูล', 'ยังไม่มีข้อมูลให้ Export', 'warning'); return; }
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Timestamp,Type,Reason,Time,Feeling,Knowledge,Benefit\n";
-            surveyData.forEach(row => {
-                const rowArray = [`"${row.timestamp}"`, `"${row.q1}"`, `"${row.q2}"`, `"${row.q3}"`, `"${row.q4}"`, `"${row.q5}"`, `"${row.q6}"`];
-                csvContent += rowArray.join(",") + "\n";
-            });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "activity_survey_data.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        // --- DATA LOGIC ---
         function generateMockData(count) {
             const types = ['จิตอาสา', 'อบรมวิชาการ', 'ประกวดแข่งขันต่างๆ', 'Open House'];
             const motivations = ['หาประสบการณ์ใหม่ๆ', 'สะสมผลงานหรือ เกียรติบัตร', 'โดนบังคับให้เข้าร่วมกิจกรรม', 'เข้าร่วมตามเพื่อน'];
@@ -836,7 +419,6 @@
             const feelings = ['รู้สึกสนุกและได้ประสบการณ์', 'รู้สึกเฉยๆ', 'รู้สึกเหนื่อยไม่อยากเข้าร่วม', 'ไม่รู้สึกอะไรเลย'];
             const benefits = ['ได้มิตรภาพต่างโรงเรียน', 'เพิ่มทักษะความสามารถความเป็นผู้นำ', 'มีความกล้าแสดงออกมากขึ้น', 'ได้เรียนรู้การทำงานร่วมกับผู้อื่น'];
             const developments = ['ด้านความเป็นผู้นำ', 'ด้านจิตอาสา', 'ด้านวิชาการ', 'ด้านคุณธรรมจริยธรรม'];
-
             for (let i = 0; i < count; i++) {
                 surveyData.push({
                     timestamp: new Date().toLocaleString('th-TH'),
@@ -850,32 +432,19 @@
             }
         }
 
-        function countBy(key) {
-            return surveyData.reduce((acc, curr) => { acc[curr[key]] = (acc[curr[key]] || 0) + 1; return acc; }, {});
-        }
-
+        // --- DASHBOARD UPDATES ---
         function updateDashboard() {
-            // Remove check for empty data to allow empty state rendering if needed
-            
-            // KPIs
             document.getElementById('kpi-total').innerText = surveyData.length;
             const happyCount = surveyData.filter(d => d.q4 === 'รู้สึกสนุกและได้ประสบการณ์').length;
-            const satisfaction = surveyData.length > 0 ? Math.round((happyCount / surveyData.length) * 100) : 0;
-            document.getElementById('kpi-satisfaction').innerText = satisfaction + '%';
+            document.getElementById('kpi-satisfaction').innerText = surveyData.length > 0 ? Math.round((happyCount / surveyData.length) * 100) + '%' : '0%';
             
             const countsQ1 = countBy('q1');
-            const topActivity = Object.keys(countsQ1).length ? Object.keys(countsQ1).reduce((a, b) => countsQ1[a] > countsQ1[b] ? a : b) : '-';
-            document.getElementById('kpi-top-activity').innerText = topActivity;
-
+            document.getElementById('kpi-top-activity').innerText = Object.keys(countsQ1).length ? Object.keys(countsQ1).reduce((a, b) => countsQ1[a] > countsQ1[b] ? a : b) : '-';
             const countsQ6 = countBy('q6');
-            let topBenefit = '-';
-            if (Object.keys(countsQ6).length > 0) topBenefit = Object.keys(countsQ6).reduce((a, b) => countsQ6[a] > countsQ6[b] ? a : b);
-            document.getElementById('kpi-top-benefit').innerText = topBenefit;
+            document.getElementById('kpi-top-benefit').innerText = Object.keys(countsQ6).length ? Object.keys(countsQ6).reduce((a, b) => countsQ6[a] > countsQ6[b] ? a : b) : '-';
 
-            // Table
             const tbody = document.getElementById('dataTableBody');
             tbody.innerHTML = '';
-            // Show latest 50 rows only to prevent lag if data is huge
             const displayData = surveyData.slice(-50).reverse();
             displayData.forEach(d => { 
                 const tr = document.createElement('tr');
@@ -884,129 +453,118 @@
                 tbody.appendChild(tr);
             });
 
-            // --- SUMMARY STATS ---
-            updateSummaryStats();
-
-            // Color Palette
             const colors = ['#3b82f6', '#ef4444', '#f59e0b', '#10b981', '#8b5cf6', '#ec4899', '#6366f1'];
-
-            // 1. Q1 Chart
-            createOrUpdateChart('chartType', 'doughnut', {
-                labels: Object.keys(countsQ1),
-                datasets: [{ data: Object.values(countsQ1), backgroundColor: [colors[0], colors[2], colors[3], colors[5]] }]
-            });
-
-            // 2. Q2 Chart
+            
+            // Basic Charts
+            createOrUpdateChart('chartType', 'doughnut', { labels: Object.keys(countsQ1), datasets: [{ data: Object.values(countsQ1), backgroundColor: [colors[0], colors[2], colors[3], colors[5]] }] });
             const countsQ2 = countBy('q2');
-            createOrUpdateChart('chartMotivation', 'bar', {
-                labels: Object.keys(countsQ2),
-                datasets: [{ label: 'จำนวน (คน)', data: Object.values(countsQ2), backgroundColor: [colors[5], colors[4], colors[1], colors[0]], borderRadius: 6 }]
-            }, { indexAxis: 'y' });
-
-            // 3. Q3 Chart
+            createOrUpdateChart('chartMotivation', 'bar', { labels: Object.keys(countsQ2), datasets: [{ label: 'จำนวน (คน)', data: Object.values(countsQ2), backgroundColor: [colors[5], colors[4], colors[1], colors[0]], borderRadius: 6 }] }, { indexAxis: 'y' });
             const countsQ3 = countBy('q3');
-            createOrUpdateChart('chartTime', 'polarArea', {
-                labels: Object.keys(countsQ3),
-                datasets: [{ data: Object.values(countsQ3), backgroundColor: [colors[2], colors[0], colors[3], colors[6]] }]
-            });
-
-            // 4. Q4 Chart (Feelings)
+            createOrUpdateChart('chartTime', 'polarArea', { labels: Object.keys(countsQ3), datasets: [{ data: Object.values(countsQ3), backgroundColor: [colors[2], colors[0], colors[3], colors[6]] }] });
             const countsQ4 = countBy('q4');
-            createOrUpdateChart('chartFeelings', 'pie', {
-                labels: Object.keys(countsQ4),
-                datasets: [{ data: Object.values(countsQ4), backgroundColor: [colors[3], colors[1], colors[2], colors[0]] }]
-            });
-
-            // 5. Q5 Chart (Knowledge/Skills)
+            createOrUpdateChart('chartFeelings', 'pie', { labels: Object.keys(countsQ4), datasets: [{ data: Object.values(countsQ4), backgroundColor: [colors[3], colors[1], colors[2], colors[0]] }] });
             const countsQ5 = countBy('q5');
-            createOrUpdateChart('chartSkills', 'radar', {
-                labels: Object.keys(countsQ5),
-                datasets: [{ label: 'ความรู้', data: Object.values(countsQ5), backgroundColor: 'rgba(139, 92, 246, 0.2)', borderColor: colors[4], pointBackgroundColor: colors[4] }]
-            });
-
-             // 6. Q6 Chart (Benefit)
-            createOrUpdateChart('chartBenefit', 'bar', {
-                labels: Object.keys(countsQ6),
-                datasets: [{ label: 'จำนวน (คน)', data: Object.values(countsQ6), backgroundColor: [colors[0], colors[1], colors[2], colors[3]], borderRadius: 6 }]
-            });
-
-            // Trend Chart
+            createOrUpdateChart('chartSkills', 'radar', { labels: Object.keys(countsQ5), datasets: [{ label: 'ความรู้', data: Object.values(countsQ5), backgroundColor: 'rgba(139, 92, 246, 0.2)', borderColor: colors[4], pointBackgroundColor: colors[4] }] });
+            createOrUpdateChart('chartBenefit', 'bar', { labels: Object.keys(countsQ6), datasets: [{ label: 'จำนวน (คน)', data: Object.values(countsQ6), backgroundColor: [colors[0], colors[1], colors[2], colors[3]], borderRadius: 6 }] });
+            
+            // Trend
             const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-            createOrUpdateChart('chartTrend', 'line', {
-                labels: days,
-                datasets: [{ label: 'ความพึงพอใจ', data: days.map(() => Math.floor(Math.random() * 10) + 1), borderColor: colors[3], backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }]
-            });
+            createOrUpdateChart('chartTrend', 'line', { labels: days, datasets: [{ label: 'ความพึงพอใจ', data: days.map(() => Math.floor(Math.random() * 10) + 1), borderColor: colors[3], backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }] });
+
+            // --- ADVANCED ANALYSIS ---
+            calculateAdvancedStats();
         }
 
-        function updateSummaryStats() {
-            const questions = [
-                { key: 'q1', title: 'ประเภทกิจกรรมยอดฮิต', icon: 'fa-chart-pie', color: 'text-blue-500', bg: 'bg-blue-50' },
-                { key: 'q2', title: 'แรงจูงใจหลัก', icon: 'fa-flag-checkered', color: 'text-rose-500', bg: 'bg-rose-50' },
-                { key: 'q3', title: 'ช่วงเวลาที่สะดวกที่สุด', icon: 'fa-clock', color: 'text-amber-500', bg: 'bg-amber-50' },
-                { key: 'q4', title: 'ความรู้สึกส่วนใหญ่', icon: 'fa-smile', color: 'text-green-500', bg: 'bg-green-50' },
-                { key: 'q5', title: 'ความรู้ที่ได้รับสูงสุด', icon: 'fa-brain', color: 'text-indigo-500', bg: 'bg-indigo-50' },
-                { key: 'q6', title: 'ด้านที่พัฒนาเด่นชัด', icon: 'fa-chart-bar', color: 'text-purple-500', bg: 'bg-purple-50' }
-            ];
+        // New Advanced Calculation Function
+        function calculateAdvancedStats() {
+            // 1. Chart Relation 1: Activity Type vs Feeling (Stacked Bar)
+            const activities = ['จิตอาสา', 'อบรมวิชาการ', 'ประกวดแข่งขันต่างๆ', 'Open House'];
+            const feelings = ['รู้สึกสนุกและได้ประสบการณ์', 'รู้สึกเฉยๆ', 'รู้สึกเหนื่อยไม่อยากเข้าร่วม', 'ไม่รู้สึกอะไรเลย'];
+            const feelingColors = ['#22c55e', '#94a3b8', '#ef4444', '#64748b']; // Green, Gray, Red, Slate
 
-            const container = document.getElementById('summary-cards');
-            if(!container) return;
-            container.innerHTML = '';
-
-            questions.forEach(q => {
-                const counts = countBy(q.key);
-                let maxKey = '-';
-                let maxVal = 0;
-                let total = surveyData.length;
-                
-                for(const [k, v] of Object.entries(counts)) {
-                    if(v > maxVal) {
-                        maxVal = v;
-                        maxKey = k;
-                    }
-                }
-                
-                const percent = total > 0 ? Math.round((maxVal / total) * 100) : 0;
-
-                const card = `
-                    <div class="bg-white p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col hover:shadow-md transition-shadow">
-                        <div class="flex items-center mb-2">
-                            <div class="w-8 h-8 rounded-lg ${q.bg} flex items-center justify-center mr-3">
-                                <i class="fas ${q.icon} ${q.color}"></i>
-                            </div>
-                            <span class="text-sm font-semibold text-slate-500">${q.title}</span>
-                        </div>
-                        <div class="mt-1">
-                            <h4 class="text-lg font-bold text-slate-800 truncate" title="${maxKey}">${maxKey}</h4>
-                            <div class="flex items-center mt-2">
-                                <div class="flex-1 bg-slate-100 rounded-full h-1.5 mr-2">
-                                    <div class="h-1.5 rounded-full ${q.color.replace('text', 'bg')}" style="width: ${percent}%"></div>
-                                </div>
-                                <span class="text-xs text-slate-400 font-medium">${percent}% (${maxVal} คน)</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += card;
+            const stackedData = feelings.map((feeling, index) => {
+                return {
+                    label: feeling,
+                    data: activities.map(act => surveyData.filter(d => d.q1 === act && d.q4 === feeling).length),
+                    backgroundColor: feelingColors[index],
+                    stack: 'Stack 0',
+                };
             });
+
+            createOrUpdateChart('chartRelation1', 'bar', {
+                labels: activities,
+                datasets: stackedData
+            }, {
+                plugins: { legend: { position: 'bottom' } },
+                scales: { x: { stacked: true }, y: { stacked: true } }
+            });
+
+            // 2. Chart Relation 2: Time vs Benefit (Bubble Chart Simulation using Scatter or Bar)
+            // Using Grouped Bar for clarity
+            const times = ['ช่วงเสาร์-อาทิตย์', 'ช่วงปิดภาคเรียน', 'ช่วงเปิดภาคเรียน', 'ช่วงวันหยุดราชการ'];
+            const benefitGroups = ['ด้านความเป็นผู้นำ', 'ด้านจิตอาสา', 'ด้านวิชาการ', 'ด้านคุณธรรมจริยธรรม'];
+            const benefitColors = ['#3b82f6', '#f43f5e', '#f59e0b', '#10b981'];
+
+            const groupedData = benefitGroups.map((ben, index) => {
+                return {
+                    label: ben,
+                    data: times.map(time => surveyData.filter(d => d.q3 === time && d.q6 === ben).length),
+                    backgroundColor: benefitColors[index]
+                };
+            });
+
+            createOrUpdateChart('chartRelation2', 'bar', {
+                labels: times,
+                datasets: groupedData
+            });
+
+            // 3. Auto Summary Text
+            generateTextSummary();
+        }
+
+        function generateTextSummary() {
+            if(surveyData.length === 0) return;
+            
+            const total = surveyData.length;
+            const q1Counts = countBy('q1');
+            const topActivity = Object.keys(q1Counts).reduce((a, b) => q1Counts[a] > q1Counts[b] ? a : b);
+            const q4Counts = countBy('q4');
+            const topFeeling = Object.keys(q4Counts).reduce((a, b) => q4Counts[a] > q4Counts[b] ? a : b);
+            const q6Counts = countBy('q6');
+            const topBenefit = Object.keys(q6Counts).reduce((a, b) => q6Counts[a] > q6Counts[b] ? a : b);
+
+            const summary = `
+                <p>จากการสำรวจนักเรียนจำนวน <b>${total} คน</b> พบว่ากิจกรรมที่ได้รับความสนใจมากที่สุดคือ <b>"${topActivity}"</b> 
+                โดยส่วนใหญ่ผู้เข้าร่วมกิจกรรมมีความรู้สึก <b>"${topFeeling}"</b> ซึ่งสะท้อนให้เห็นถึงผลตอบรับในภาพรวม 
+                นอกจากนี้ ผู้ตอบแบบสอบถามมองว่ากิจกรรมเหล่านี้ช่วยพัฒนา <b>"${topBenefit}"</b> ได้อย่างโดดเด่นที่สุด</p>
+                <p class="mt-2 text-sm text-gray-500">ข้อมูลนี้รวบรวมเมื่อ: ${new Date().toLocaleDateString('th-TH')}</p>
+            `;
+            document.getElementById('auto-summary-text').innerHTML = summary;
         }
 
         function createOrUpdateChart(id, type, data, options = {}) {
             const ctx = document.getElementById(id).getContext('2d');
             if (chartInstances[id]) chartInstances[id].destroy();
-
-            // Store pure data for switching
             chartDataStore[id] = { data: data, options: options };
-
-            chartInstances[id] = new Chart(ctx, {
-                type: type,
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Sarabun' }, boxWidth: 12 } } },
-                    ...options
-                }
-            });
+            chartInstances[id] = new Chart(ctx, { type: type, data: data, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { font: { family: 'Sarabun' }, boxWidth: 12 } } }, ...options } });
+        }
+        function changeChartType(canvasId, newType, extraOptions = {}) {
+            if (!chartDataStore[canvasId]) return;
+            const stored = chartDataStore[canvasId];
+            let finalOptions = { ...stored.options, ...extraOptions };
+            if (newType !== 'bar') { delete finalOptions.indexAxis; }
+            const newData = JSON.parse(JSON.stringify(stored.data)); 
+            if(newType === 'line' || newType === 'radar') { newData.datasets.forEach(ds => { if(extraOptions.fill !== undefined) ds.fill = extraOptions.fill; if(extraOptions.tension !== undefined) ds.tension = extraOptions.tension; if(extraOptions.stepped !== undefined) ds.stepped = extraOptions.stepped; }); }
+            createOrUpdateChart(canvasId, newType, newData, finalOptions);
+        }
+        function downloadChart(canvasId) {
+            const canvas = document.getElementById(canvasId); const link = document.createElement('a'); link.download = `${canvasId}-export.png`; link.href = canvas.toDataURL('image/png', 1.0); link.click();
+        }
+        function exportToCSV() {
+            if(surveyData.length === 0) { Swal.fire('ไม่มีข้อมูล', 'ยังไม่มีข้อมูลให้ Export', 'warning'); return; }
+            let csvContent = "data:text/csv;charset=utf-8,Timestamp,Type,Reason,Time,Feeling,Knowledge,Benefit\n";
+            surveyData.forEach(row => { csvContent += [`"${row.timestamp}"`, `"${row.q1}"`, `"${row.q2}"`, `"${row.q3}"`, `"${row.q4}"`, `"${row.q5}"`, `"${row.q6}"`].join(",") + "\n"; });
+            const link = document.createElement("a"); link.setAttribute("href", encodeURI(csvContent)); link.setAttribute("download", "activity_survey_data.csv"); document.body.appendChild(link); link.click(); document.body.removeChild(link);
         }
     </script>
 </body>
